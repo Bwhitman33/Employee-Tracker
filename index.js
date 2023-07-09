@@ -78,7 +78,8 @@ function viewAllEmployees() {
         CONCAT (manager.first_name, " ", manager.last_name) AS manager,
         department.name AS department
         FROM employee
-        JOIN role ON role.department_id = department.id
+        JOIN role ON employee.role_id = role.id
+        JOIN department ON role.department_id = department.id
         LEFT JOIN employee manager ON employee.manager_id = manager.id`,
        function (err, result) {
         if (err) {
@@ -89,5 +90,24 @@ function viewAllEmployees() {
        }
     );
 }
+
+function viewAllRoles() {
+    dbConnect.query(
+        `SELECT 
+            role.id, 
+            role.title, 
+            role.salary, 
+            department.name AS department FROM role JOIN department ON role.department_id = department.id`,
+        function (err, result) {
+            if(err) {
+                console.log(err);
+            }
+            console.table(result);
+            appStart();
+        }
+    );    
+}
+    
+
 
 appStart();
