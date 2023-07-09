@@ -107,7 +107,22 @@ function viewAllRoles() {
         }
     );    
 }
+
+function viewAllDepartments() {
+    dbConnect.query(
+        "SELECT * FROM department", 
+        function (err, result) {
+            if (err) {
+                console.log(err);
+            }
+            console.table(result);
+            appStart();
+        });
+}
+
+function exit() {
+    console.log("Thank you for updating the Company Database!");
+    process.exit();
+}
     
-
-
 appStart();
