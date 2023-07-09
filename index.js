@@ -120,6 +120,58 @@ function viewAllDepartments() {
         });
 }
 
+function addNewEmployee() {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'first_name',
+                message: 'What is the Employees First Name?'
+            },
+            {
+                type: 'input',
+                name: 'last_name',
+                message: 'What is the Employees Last Name?'
+            },
+            {
+                type: 'input',
+                name: 'role_id',
+                message: 'What will be this Employees Role within the Company? (Enter by Role Id)'
+            },
+            {
+                type: 'input',
+                name: 'manager_id',
+                message: 'Who will this Employee be reporting to? (Enter Manager by Id)'
+            },
+        ])
+        .then((employeeInfo) => {
+            dbConnect.query(
+                "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
+                [employeeInfo.first_name, employeeInfo.last_name, employeeInfo.role_id, employeeInfo.manager_id],
+                function (err, result) {
+                    if(err) throw err;
+                }
+            );
+            dbConnect.query(
+                `SELECT
+                employee.id,
+                CONCAT (employee.first_name, " ", employee.last_name) AS name,
+                role.title,
+                role.salary,
+                CONCAT (manager.first_name, " ", manager.last_name) AS manager,
+                department.name AS department
+                FROM employee
+                JOIN role ON employee.role_id = role.id
+                JOIN department ON role.department_id = department.id
+                LEFT JOIN employee manager ON employee.manager_id = manager.id`,
+            function (err, result) {
+                console.table(result);
+                appStart();
+            }
+          );
+        });
+}
+
 function exit() {
     console.log("Thank you for updating the Company Database!");
     process.exit();
