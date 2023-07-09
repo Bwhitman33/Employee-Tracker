@@ -244,6 +244,50 @@ function addNewDepartment() {
           });
 }
 
+function updateEmployeeRole() {
+    inquirer
+    .prompt([
+        {
+            type: "input",
+            name: "employee_name",
+            message: "What Employee Would You Like to Update the Role of? (Enter Employee Id)"
+        },
+        {
+            type: "input",
+            name: "employee_role",
+            message: "What Role is this Employee Being Reassigned to? (Enter Role Id)"
+        },
+    ])
+    .then((updatedRole) => {
+        dbConnect.query(
+            `UPDATE
+            employee SET role_id = ? WHERE id=?`,
+            [updatedRole.employee_role, updatedRole.employee_name],
+            function (err, result) {
+                if (err) throw err;
+            }
+        );
+        dbConnect.query(
+            `SELECT
+            employee.id,
+            CONCAT (employee.first_name, " ", employee.last_name) AS name,
+            role.title,
+            role.salary,
+            CONCAT (manager.first_name, " ", manager.last_name) AS manager,
+            department.name AS department
+            FROM employee
+            JOIN role ON employee.role_id = role.id
+            JOIN department ON role.department_id = department.id
+            LEFT JOIN employee manager ON employee.manager_id = manager.id`,
+            function (err, result) {
+                if (err) throw err;
+                console.table(result);
+                appStart();
+            }
+        );
+    });
+}
+
 function exit() {
     console.log("Thank you for updating the Company Database!");
     process.exit();
