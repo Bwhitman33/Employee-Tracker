@@ -176,6 +176,48 @@ function addNewEmployee() {
         });
 }
 
+function addDeptRole() {
+    inquirer
+        .prompt([
+            {
+                type: "input",
+                name: "role_name",
+                message: "What is the new Role called?"
+            },
+            {
+                type: "input",
+                name: "role_salary",
+                message: "What will the annual Salary be for this Role?"
+            },
+            {
+                type: 'input',
+                name: 'department_id',
+                message: 'What Department will this Role belong to? (Enter Department Id)'
+            },
+        ])
+        .then((newRoleInfo) =>{
+            dbConnect.query(
+                "INSERT INTO role (title, salary, department_id) VALUES (?,?,?);",
+                [newRoleInfo.role_name, newRoleInfo.role_salary, newRoleInfo.department_id],
+                function (err, result) {
+                    if (err) throw (err);
+                })
+                dbConnect.query(
+                    `SELECT
+                    role.title,
+                    role.salary,
+                    department.name AS department
+                    FROM role
+                    JOIN department
+                    ON role.department_id = department.id`,
+                    function (err, result) {
+                        if (err) throw err;
+                        console.table(result);
+                        appStart();
+                    })
+        });
+}
+
 function exit() {
     console.log("Thank you for updating the Company Database!");
     process.exit();
