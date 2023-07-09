@@ -257,12 +257,17 @@ function updateEmployeeRole() {
             name: "employee_role",
             message: "What Role is this Employee Being Reassigned to? (Enter Role Id)"
         },
+        {
+            type: "input",
+            name: "newManager_id",
+            message: "Who will this Employee be Reporting to Now? (Enter New Manager Id)"
+        }
     ])
     .then((updatedRole) => {
         dbConnect.query(
             `UPDATE
-            employee SET role_id = ? WHERE id=?`,
-            [updatedRole.employee_role, updatedRole.employee_name],
+            employee SET (role_id = ?, manager_id = ?) WHERE id = ?`,
+            [updatedRole.employee_role, updatedRole.employee_name, updatedRole.newManager_id],
             function (err, result) {
                 if (err) throw err;
             }
