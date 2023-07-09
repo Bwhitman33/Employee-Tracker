@@ -2,7 +2,6 @@ const inquirer = require("inquirer");
 const mysql = require("mysql2");
 require('dotenv').config();
 
-
 // Create a connection to the Database
 const dbConnect = mysql.createConnection(
     {
@@ -67,4 +66,26 @@ function appStart() {
         .catch((err) => {
             console.log(err);
         });
+}
+
+function viewAllEmployees() {
+    dbConnect.query(
+        `Select
+        employee.id,
+        CONCAT (employee.first_name, " ", employee.last_name) AS name,
+        role.title,
+        role.salary,
+        CONCAT (manager.first_name, " ", manager.last_name) AS manager,
+        department.name AS department
+        FROM employee
+        JOIN role ON role.department_id = department.id
+        LEFT JOIN employee manager ON employee.manager_id = manager.id`,
+       function (err, result) {
+        if (err) {
+            console.log(err);
+        }
+        console.table(result);
+        appStart();
+       }
+    );
 }
