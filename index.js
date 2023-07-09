@@ -1,5 +1,6 @@
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
+const logo = require("asciiart-logo");
 require('dotenv').config();
 
 // Create a connection to the Database
@@ -17,6 +18,9 @@ const dbConnect = mysql.createConnection(
 // Function that initializes the main menu the user sees when they start the app, executes function on choice
 
 function appStart() {
+    const logoText = logo({ name: "EIKON" }).render();
+    console.log(logoText);
+
     inquirer
         .prompt([
             {
@@ -26,9 +30,9 @@ function appStart() {
                 choices: [
                     'View All Employees',
                     'Add New Employee',
-                    'Update Role of an Employee',
+                    'Update Role of a Current Employee',
                     'View All Employee Roles',
-                    'Add a Role to an existing Employee',
+                    'Add a Role to an Existing Department',
                     'View All Departments',
                     'Add a New Department', 
                     'Exit',
@@ -43,14 +47,14 @@ function appStart() {
                 case 'Add New Employee':
                     addNewEmployee();
                     break;
-                case 'Update Role of an Employee':
+                case 'Update Role of a Current Employee':
                     updateEmployeeRole();
                     break;
                 case 'View All Employee Roles':
                     viewAllRoles();
                     break;
-                case 'Add a Role to an existing Employee':
-                    addEmployeeRole();
+                case 'Add a Role to an Existing Department':
+                    addDeptRole();
                     break;
                 case 'View All Departments':
                     viewAllDepartments();
@@ -144,10 +148,10 @@ function addNewEmployee() {
                 message: 'Who will this Employee be reporting to? (Enter Manager by Id)'
             },
         ])
-        .then((employeeInfo) => {
+        .then((newEmployeeInfo) => {
             dbConnect.query(
                 "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)",
-                [employeeInfo.first_name, employeeInfo.last_name, employeeInfo.role_id, employeeInfo.manager_id],
+                [newEmployeeInfo.first_name, newEmployeeInfo.last_name, newEmployeeInfo.role_id, newEmployeeInfo.manager_id],
                 function (err, result) {
                     if(err) throw err;
                 }

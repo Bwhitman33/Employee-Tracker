@@ -11,6 +11,7 @@
     "url": "git+https://github.com/Bwhitman33/Employee-Tracker.git"
   },
   "dependencies": {
+    "asciiart-logo": "^0.2.6",
     "console.table": "^0.10.0",
     "dotenv": "^16.3.1",
     "inquirer": "^8.2.4",
