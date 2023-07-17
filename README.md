@@ -3,6 +3,13 @@
   # Description
   This app allows companies to store information regarding departments, roles, and employees. 
   <br>
+
+  # Screenshot and Demo Link
+  <img src="assets\images\Capture.JPG">
+  <br> 
+  <a href="https://youtu.be/OPi-Y_NAENQ"> Application Demo on Youtube </a>
+  <br>
+
   
   # Table of Contents
   - [Installation](#installation)
@@ -16,12 +23,6 @@
   # Installation
   See below for any of this project's dependencies - 
   Upon cloning the repo, enter npm i into the terminal to download all dependencies
-  <br>
-
-  # Screenshot and Demo Link
-  <img src="assets\images\Capture.JPG">
-  <br> 
-  <a href="https://youtu.be/OPi-Y_NAENQ"> Application Demo on Youtube </a>
   <br>
 
   # Usage
